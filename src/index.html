@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Code Analyzer Tool</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Code Analyzer Tool</h1>
+    <div class="coding-section">
+      <div class="file-select">
+        <form id="uploadForm" enctype="multipart/form-data">
+          <label for="fileInput">Select a file:</label>
+          <input type="file" id="fileInput" name="file" />
+          <br />
+          <label for="analysisType">Select analysis type:</label>
+          <select id="analysisType" name="analysisType">
+            <option value="lexical">Lexical Analysis</option>
+            <option value="semantic">Semantic Analysis</option>
+            <option value="parser">Parser Analysis</option>
+          </select>
+          <br />
+          <input type="button" value="Analyze" onclick="analyzeFile()" />
+          <div id="fileContent">No File Has Been Choosen</div>
+        </form>
+      </div>
+      <div id="output">No File Has Been Choosen, <br> Choose A File For An OutPut, Bozoo!!!</div>
+    </div>
+    <script>
+      function analyzeFile() {
+        var fileInput = document.getElementById("fileInput");
+        var analysisType = document.getElementById("analysisType").value;
+        var formData = new FormData();
+        formData.append("file", fileInput.files[0]);
+        formData.append("analysisType", analysisType);
+
+        fetch("http://localhost:8080/analyze", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.text())
+          .then((data) => {
+            document.getElementById("output").innerText = data;
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+
+          const reader = new FileReader();
+
+          reader.onload = function(event) {
+          const contents = event.target.result;
+          const fileContentDiv = document.getElementById('fileContent');
+          fileContentDiv.innerHTML = '';
+          const lines = contents.split('\n');
+          lines.forEach(line => {
+            const p = document.createElement('p');
+            p.textContent = line;
+            fileContentDiv.appendChild(p);
+          });
+        };
+
+        reader.readAsText(fileInput.files[0]);
+      }
+    </script>
+  </body>
+</html>
