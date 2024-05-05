@@ -104,6 +104,3 @@ java TestSemantic test_file_path
     3. If the target Variable is float, then the type of the source Expression must be either float or int.
     4. Otherwise if the target Variable is int, then the type of the source Expression must be either int or char.
     5. Otherwise the target Variable must have the same type as the source Expression.
-
-### License:
-This software is licensed under the [Modified BSD License](https://opensource.org/licenses/BSD-3-Clause).
